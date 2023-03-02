@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+
+
+model Tasks {
+  id             String @id
+  parentId       String?
+  name           String?
+  startDate      DateTime?
+  endDate        DateTime?
+  effort         Float?
+  effortUnit     String?  @default("hour")
+  duration       Float?   
+  durationUnit   String?  @default("day")
+  percentDone    Float?   @default(0.00)
+  schedulingMode String?
+  note           String?
+  constraintType String?
+  constraintDate DateTime?
+  manuallyScheduled Boolean?
+  effortDriven   Boolean?
+  inactive       Boolean?
+  cls            String?
+  iconCls        String?
+  color          String?
+  parentIndex    Int?  @default(0)
+  expanded       Int?  @default(0)
+  calendar       Int?
+  deadline       DateTime?
+  direction      String?
+  PhantomId      String?
+  unscheduled    Boolean? 
+
+  @@index([parentId], name: "parentId")
+  @@index([calendar], name: "calendar")
+}
+
+model Dependencies {
+  id        String  @id
+  fromEvent String?
+  toEvent   String?
+  type      Int?    @default(2)
+  cls       String?
+  lag       Float?  @default(0)
+  lagUnit   String? @default("day")
+  PhantomId String?
+  active    Boolean?
+  fromSide  String?
+  toSide    String?
+
+  @@index([fromEvent], name: "fromEvent")
+  @@index([toEvent], name: "toEvent")
+}
