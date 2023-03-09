@@ -1,6 +1,6 @@
 import type { ActionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 import { prisma } from "~/utils/db.server";
 import type { Dependencies, Tasks } from "@prisma/client";
 import {
@@ -76,7 +76,7 @@ export async function action({ request: req }: ActionArgs) {
       )) {
         if (key2 === "added") {
           value2.forEach((addObj) => taskUpdates.push(addObj));
-          value2[0].id = uuidv4();
+          value2[0].id = crypto.randomUUID();
           const val = await createOperation(value2[0], "tasks");
           lastKey = val.msg;
           err = val.error;
@@ -100,7 +100,7 @@ export async function action({ request: req }: ActionArgs) {
         value as SyncReqBodyDependenciesObj
       )) {
         if (key2 === "added") {
-          value2[0].id = uuidv4();
+          value2[0].id = crypto.randomUUID();
           value2.forEach((addObj) => dependencyUpdates.push(addObj));
           const val = await createOperation(value2[0], "dependencies");
           lastKey = val.msg;
